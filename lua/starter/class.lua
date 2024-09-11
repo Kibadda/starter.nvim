@@ -10,12 +10,15 @@
 ---@field selected number
 ---@field prompt string
 ---@field buf number
+---@field ns number
 ---@field group number
 ---@field day string[]
 ---@field _saved_options table
 ---@field _offsets { width: number, left: number, top: number }?
 local M = {}
 M.__index = M
+
+local char_width = #"│"
 
 function M:setup()
   if not self.buf or not vim.api.nvim_buf_is_valid(self.buf) then
@@ -107,13 +110,19 @@ function M:calculate_offsets()
   }
 end
 
-function M:lines()
+function M:display()
+  if not self._offsets then
+    self._offsets = self:calculate_offsets()
+  end
+
   local lines = {}
+  local extmarks = {}
 
   table.insert(lines, "┌" .. ("─"):rep(self._offsets.width + 4) .. "┐")
   table.insert(lines, "│" .. (" "):rep(self._offsets.width + 4) .. "│")
   for _, line in ipairs(self.day) do
     table.insert(lines, "│  " .. line .. "  │")
+    table.insert(extmarks, { line = #lines - 1, col = char_width, end_col = char_width + #line, hl = "Red" })
   end
   local date = os.date "%d.%m.%Y"
   local date_offset = (self._offsets.width - #date) / 2
@@ -148,6 +157,7 @@ function M:lines()
     local prefix = "  "
     if i == self.selected then
       prefix = "> "
+      table.insert(extmarks, { line = #lines, col = char_width, end_col = char_width + #match + 2, hl = "Blue" })
     end
     table.insert(lines, "│" .. prefix .. match .. (" "):rep(self._offsets.width - #match) .. "  │")
   end
@@ -162,19 +172,28 @@ function M:lines()
     table.insert(lines, 1, "")
   end
 
-  return lines
-end
-
-function M:display()
-  if not self._offsets then
-    self._offsets = self:calculate_offsets()
-  end
-
   vim.bo[self.buf].modifiable = true
-  vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, self:lines())
+  vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, lines)
   vim.bo[self.buf].modifiable = false
   vim.bo[self.buf].modified = false
-  vim.api.nvim_win_set_cursor(0, { self._offsets.top + #self.day + 7, self._offsets.left + #self.prompt + #"│" + 2 })
+  vim.api.nvim_win_set_cursor(0, {
+    self._offsets.top + #self.day + 7,
+    self._offsets.left + #self.prompt + char_width + 2,
+  })
+
+  for _, extmark in ipairs(extmarks) do
+    vim.api.nvim_buf_set_extmark(
+      self.buf,
+      self.ns,
+      self._offsets.top + extmark.line,
+      self._offsets.left + extmark.col,
+      {
+        end_line = self._offsets.top + extmark.line,
+        end_col = self._offsets.left + extmark.end_col,
+        hl_group = extmark.hl,
+      }
+    )
+  end
 end
 
 function M:teardown()
@@ -198,6 +217,7 @@ function M.new(opts)
     selected = 1,
     prompt = "",
     buf = opts.buf,
+    ns = vim.api.nvim_create_namespace "StarterNvim",
     group = vim.api.nvim_create_augroup("StarterNvim" .. opts.buf, { clear = true }),
     day = require("starter.days").get(),
     _saved_options = {},
