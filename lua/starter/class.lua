@@ -145,21 +145,34 @@ function M:display()
   self.matches = vim.tbl_map(function(item)
     return item.text
   end, self.items)
+  local matches = { self.matches }
   if #self.prompt > 0 then
-    self.matches = vim.fn.matchfuzzy(self.matches, self.prompt)
+    matches = vim.fn.matchfuzzypos(self.matches, self.prompt)
+    self.matches = matches[1]
   end
 
   if self.selected > #self.matches then
     self.selected = math.max(#self.matches, 1)
   end
 
-  for i, match in ipairs(self.matches) do
+  for i = 1, #matches[1] do
     local prefix = "  "
     if i == self.selected then
       prefix = "> "
-      table.insert(extmarks, { line = #lines, col = char_width, end_col = char_width + #match + 2, hl = "Blue" })
+      table.insert(
+        extmarks,
+        { line = #lines, col = char_width, end_col = char_width + #matches[1][i] + 2, hl = "Blue" }
+      )
     end
-    table.insert(lines, "│" .. prefix .. match .. (" "):rep(self._offsets.width - #match) .. "  │")
+    if matches[2] then
+      for _, pos in ipairs(matches[2][i]) do
+        table.insert(
+          extmarks,
+          { line = #lines, col = char_width + pos + 2, end_col = char_width + pos + 3, hl = "Underlined" }
+        )
+      end
+    end
+    table.insert(lines, "│" .. prefix .. matches[1][i] .. (" "):rep(self._offsets.width - #matches[1][i]) .. "  │")
   end
 
   table.insert(lines, "└" .. ("─"):rep(self._offsets.width + 4) .. "┘")
