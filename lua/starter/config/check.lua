@@ -18,7 +18,10 @@ end
 function M.validate(config)
   local ok, err
 
-  ok, err = validate("starter", {})
+  ok, err = validate("starter", {
+    items = { config.items, "function", true },
+    options = { config.options, "table", true },
+  })
   if not ok then
     return false, err
   end
