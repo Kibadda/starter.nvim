@@ -65,7 +65,7 @@ function M:setup()
       self:display()
     end)
     map(key:upper(), function()
-      self.prompt = self.prompt .. key
+      self.prompt = self.prompt .. key:upper()
       self:display()
     end)
   end
