@@ -1,5 +1,4 @@
 ---@class starter.class.options
----@field items starter.item[]
 ---@field buf number
 
 ---@class starter.class
@@ -231,13 +230,15 @@ function M:teardown()
 end
 
 function M.new(opts)
+  local items = require("starter.config").items()
+
   local mapping = {}
-  for i, item in ipairs(opts.items) do
+  for i, item in ipairs(items) do
     mapping[item.text] = i
   end
 
   local starter = setmetatable({
-    items = opts.items,
+    items = items,
     mapping = mapping,
     matches = {},
     selected = 1,
