@@ -9,6 +9,7 @@
 ---@field matches string[]
 ---@field selected number
 ---@field prompt string
+---@field win number
 ---@field buf number
 ---@field ns number
 ---@field group number
@@ -30,6 +31,12 @@ function M:setup()
   for option, value in pairs(config.options) do
     self._saved_options[option] = vim.o[option]
     vim.o[option] = value
+  end
+
+  vim.api.nvim_win_set_hl_ns(self.win, self.ns)
+
+  for name, val in pairs(config.highlights) do
+    vim.api.nvim_set_hl(self.ns, name, val)
   end
 
   vim.api.nvim_create_autocmd("BufLeave", {
@@ -122,7 +129,7 @@ function M:display()
   table.insert(lines, "│" .. (" "):rep(self._offsets.width + 4) .. "│")
   for _, line in ipairs(self.day) do
     table.insert(lines, "│  " .. line .. "  │")
-    table.insert(extmarks, { line = #lines - 1, col = char_width, end_col = char_width + #line, hl = "Red" })
+    table.insert(extmarks, { line = #lines - 1, col = char_width, end_col = char_width + #line, hl = "Day" })
   end
   local date = os.date "%d.%m.%Y"
   local date_offset = (self._offsets.width - #date) / 2
@@ -156,23 +163,27 @@ function M:display()
   end
 
   for i = 1, #matches[1] do
-    local prefix = "  "
+    local indicator = "  "
     if i == self.selected then
-      prefix = "> "
+      indicator = "> "
+      table.insert(extmarks, { line = #lines, col = char_width, end_col = char_width + 2, hl = "Indicator" })
       table.insert(
         extmarks,
-        { line = #lines, col = char_width, end_col = char_width + #matches[1][i] + 2, hl = "Blue" }
+        { line = #lines, col = char_width + 2, end_col = char_width + #matches[1][i] + 2, hl = "Selected" }
       )
     end
     if matches[2] then
       for _, pos in ipairs(matches[2][i]) do
         table.insert(
           extmarks,
-          { line = #lines, col = char_width + pos + 2, end_col = char_width + pos + 3, hl = "Underlined" }
+          { line = #lines, col = char_width + pos + 2, end_col = char_width + pos + 3, hl = "Match" }
         )
       end
     end
-    table.insert(lines, "│" .. prefix .. matches[1][i] .. (" "):rep(self._offsets.width - #matches[1][i]) .. "  │")
+    table.insert(
+      lines,
+      "│" .. indicator .. matches[1][i] .. (" "):rep(self._offsets.width - #matches[1][i]) .. "  │"
+    )
   end
 
   table.insert(lines, "└" .. ("─"):rep(self._offsets.width + 4) .. "┘")
@@ -215,6 +226,7 @@ function M:teardown()
   end
 
   vim.api.nvim_clear_autocmds { group = self.group }
+  vim.api.nvim_win_set_hl_ns(self.win, 0)
 end
 
 function M.new(opts)
@@ -230,6 +242,7 @@ function M.new(opts)
     selected = 1,
     prompt = "",
     buf = opts.buf,
+    win = vim.api.nvim_get_current_win(),
     ns = vim.api.nvim_create_namespace "StarterNvim",
     group = vim.api.nvim_create_augroup("StarterNvim" .. opts.buf, { clear = true }),
     day = require("starter.days").get(),

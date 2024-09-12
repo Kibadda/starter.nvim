@@ -2,9 +2,17 @@
 ---@field text string
 ---@field action function
 
+---@class starter.config.highlights
+---@field Day? vim.api.keyset.highlight
+---@field Selected? vim.api.keyset.highlight
+---@field Indicator? vim.api.keyset.highlight
+---@field Match? vim.api.keyset.highlight
+
 ---@class starter.config
----@field items fun(): starter.item[]
----@field options table
+---@field items? fun(): starter.item[]
+---@field options? table
+---@field highlights? table
+---@field indicator? string
 
 ---@class starter.internalconfig
 local StarterDefaultConfig = {
@@ -22,6 +30,13 @@ local StarterDefaultConfig = {
     relativenumber = false,
     winbar = "",
   },
+  indicator = ">",
+  highlights = {
+    Day = { link = "Red" },
+    Selected = { link = "Blue" },
+    Indicator = { link = "Blue" },
+    Match = { underline = true },
+  },
 }
 
 ---@type starter.config | (fun(): starter.config) | nil
@@ -32,6 +47,11 @@ local opts = type(vim.g.starter) == "function" and vim.g.starter() or vim.g.star
 
 ---@type starter.internalconfig
 local StarterConfig = vim.tbl_deep_extend("force", {}, StarterDefaultConfig, opts)
+
+-- FIX: highlights should overwrite defaults
+for name, val in pairs(opts.highlights or {}) do
+  StarterConfig.highlights[name] = val
+end
 
 local check = require "starter.config.check"
 local ok, err = check.validate(StarterConfig)
