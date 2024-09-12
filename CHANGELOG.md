@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/Kibadda/starter.nvim/compare/v1.0.0...v1.0.1) (2024-09-12)
+
+
+### Bug Fixes
+
+* &lt;CR&gt; on empty list ([88efe34](https://github.com/Kibadda/starter.nvim/commit/88efe3443da91028707010aa4cbe116219a5393c))
+
 ## 1.0.0 (2024-09-12)
 
 
