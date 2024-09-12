@@ -59,7 +59,7 @@ function M:setup()
     vim.keymap.set("n", lhs, rhs, { buffer = self.buf })
   end
 
-  for key in ("abcdefghijklmnopqrstuvwxyz "):gmatch "." do
+  for key in config.keys:gmatch "." do
     map(key, function()
       self.prompt = self.prompt .. key
       self:display()

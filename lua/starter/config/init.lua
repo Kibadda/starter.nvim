@@ -13,6 +13,7 @@
 ---@field options? table
 ---@field highlights? table
 ---@field indicator? string
+---@field keys? string
 
 ---@class starter.internalconfig
 local StarterDefaultConfig = {
@@ -31,6 +32,7 @@ local StarterDefaultConfig = {
     winbar = "",
   },
   indicator = ">",
+  keys = "abcdefghijklmnopqrstuvwxyz ",
   highlights = {
     Day = { link = "Red" },
     Selected = { link = "Blue" },
