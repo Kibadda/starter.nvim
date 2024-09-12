@@ -59,7 +59,7 @@ function M:setup()
     vim.keymap.set("n", lhs, rhs, { buffer = self.buf })
   end
 
-  for key in ("abcdefghijklmnopqrstuvwxyz"):gmatch "." do
+  for key in ("abcdefghijklmnopqrstuvwxyz "):gmatch "." do
     map(key, function()
       self.prompt = self.prompt .. key
       self:display()
@@ -75,7 +75,8 @@ function M:setup()
     self:display()
   end)
   map("<C-w>", function()
-    self.prompt = ""
+    local split = vim.split(self.prompt, " ", { trimempty = true })
+    self.prompt = table.concat(split, " ", 1, #split - 1)
     self:display()
   end)
   map("<Esc>", function()
