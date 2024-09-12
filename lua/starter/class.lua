@@ -102,7 +102,17 @@ function M:setup()
 
   map("<CR>", function()
     local match = self.matches[self.selected]
+
+    if not match then
+      return
+    end
+
     local item = self.items[self.mapping[match]]
+
+    if not item then
+      return
+    end
+
     self:teardown()
     item.action()
   end)
