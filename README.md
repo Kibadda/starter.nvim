@@ -21,9 +21,9 @@ vim.g.starter = {
   },
   indicator = ">",
   highlights = {
-    Day = { link = "Red" },
-    Selected = { link = "Blue" },
-    Prefix = { link = "Blue" },
+    Day = { fg = "#EA6962" },
+    Selected = { fg = "#7DAEA3" },
+    Indicator = { fg = "#7DAEA3" },
     Match = { underline = true },
   },
 }

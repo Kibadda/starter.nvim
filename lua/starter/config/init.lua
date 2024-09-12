@@ -34,9 +34,9 @@ local StarterDefaultConfig = {
   indicator = ">",
   keys = "abcdefghijklmnopqrstuvwxyz ",
   highlights = {
-    Day = { link = "Red" },
-    Selected = { link = "Blue" },
-    Indicator = { link = "Blue" },
+    Day = { fg = "#EA6962" },
+    Selected = { fg = "#7DAEA3" },
+    Indicator = { fg = "#7DAEA3" },
     Match = { underline = true },
   },
 }
