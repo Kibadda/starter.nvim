@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/Kibadda/starter.nvim/compare/v1.0.1...v1.1.0) (2024-09-12)
+
+
+### Features
+
+* change highlights to non links ([1915962](https://github.com/Kibadda/starter.nvim/commit/1915962ea6038fdb98b2ee56520a582ee77b7421))
+
 ## [1.0.1](https://github.com/Kibadda/starter.nvim/compare/v1.0.0...v1.0.1) (2024-09-12)
 
 
