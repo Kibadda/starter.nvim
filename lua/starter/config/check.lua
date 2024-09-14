@@ -21,6 +21,25 @@ function M.validate(config)
   ok, err = validate("starter", {
     items = { config.items, "function", true },
     options = { config.options, "table", true },
+    indicator = { config.indicator, "string", true },
+    keys = { config.keys, "string", true },
+    highlights = { config.highlights, "table", true },
+    border = {
+      config.border,
+      function(a)
+        return a == nil or (type(a) == "table" and #a == 8)
+      end,
+    },
+  })
+  if not ok then
+    return false, err
+  end
+
+  ok, err = validate("starter.highlights", {
+    Day = { config.highlights.Day, "table", true },
+    Selected = { config.highlights.Selected, "table", true },
+    Indicator = { config.highlights.Indicator, "table", true },
+    Match = { config.highlights.Match, "table", true },
   })
   if not ok then
     return false, err
