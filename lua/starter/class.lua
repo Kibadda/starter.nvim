@@ -132,32 +132,49 @@ function M:display()
     self._offsets = self:calculate_offsets()
   end
 
+  local border = require("starter.config").border
+
   local lines = {}
   local extmarks = {}
 
-  table.insert(lines, "┌" .. ("─"):rep(self._offsets.width + 4) .. "┐")
-  table.insert(lines, "│" .. (" "):rep(self._offsets.width + 4) .. "│")
+  table.insert(lines, border[1] .. border[5]:rep(self._offsets.width + 4) .. border[2])
+  table.insert(lines, border[6] .. (" "):rep(self._offsets.width + 4) .. border[6])
   for _, line in ipairs(self.day) do
-    table.insert(lines, "│  " .. line .. "  │")
+    table.insert(lines, border[6] .. "  " .. line .. "  " .. border[6])
     table.insert(extmarks, { line = #lines - 1, col = char_width, end_col = char_width + #line, hl = "Day" })
   end
   local date = os.date "%d.%m.%Y"
   local date_offset = (self._offsets.width - #date) / 2
   table.insert(
     lines,
-    "│  " .. (" "):rep(math.floor(date_offset)) .. date .. (" "):rep(math.ceil(date_offset)) .. "  │"
+    border[6]
+      .. "  "
+      .. (" "):rep(math.floor(date_offset))
+      .. date
+      .. (" "):rep(math.ceil(date_offset))
+      .. "  "
+      .. border[6]
   )
   local v = vim.version()
   local version = ("NVIM v%d.%d.%d-%s"):format(v.major, v.minor, v.patch, v.prerelease)
   local version_offset = (self._offsets.width - #version) / 2
   table.insert(
     lines,
-    "│  " .. (" "):rep(math.floor(version_offset)) .. version .. (" "):rep(math.ceil(version_offset)) .. "  │"
+    border[6]
+      .. "  "
+      .. (" "):rep(math.floor(version_offset))
+      .. version
+      .. (" "):rep(math.ceil(version_offset))
+      .. "  "
+      .. border[6]
   )
-  table.insert(lines, "│" .. (" "):rep(self._offsets.width + 4) .. "│")
-  table.insert(lines, "├" .. ("─"):rep(self._offsets.width + 4) .. "┤")
-  table.insert(lines, "│  " .. self.prompt .. (" "):rep(self._offsets.width - #self.prompt) .. "  │")
-  table.insert(lines, "├" .. ("─"):rep(self._offsets.width + 4) .. "┤")
+  table.insert(lines, border[6] .. (" "):rep(self._offsets.width + 4) .. border[6])
+  table.insert(lines, border[7] .. border[5]:rep(self._offsets.width + 4) .. border[8])
+  table.insert(
+    lines,
+    border[6] .. "  " .. self.prompt .. (" "):rep(self._offsets.width - #self.prompt) .. "  " .. border[6]
+  )
+  table.insert(lines, border[7] .. border[5]:rep(self._offsets.width + 4) .. border[8])
 
   self.matches = vim.tbl_map(function(item)
     return item.text
@@ -192,11 +209,11 @@ function M:display()
     end
     table.insert(
       lines,
-      "│" .. indicator .. matches[1][i] .. (" "):rep(self._offsets.width - #matches[1][i]) .. "  │"
+      border[6] .. indicator .. matches[1][i] .. (" "):rep(self._offsets.width - #matches[1][i]) .. "  " .. border[6]
     )
   end
 
-  table.insert(lines, "└" .. ("─"):rep(self._offsets.width + 4) .. "┘")
+  table.insert(lines, border[3] .. border[5]:rep(self._offsets.width + 4) .. border[4])
 
   for i = 1, #lines do
     lines[i] = (" "):rep(self._offsets.left) .. lines[i]

@@ -39,6 +39,7 @@ local StarterDefaultConfig = {
     Indicator = { fg = "#7DAEA3" },
     Match = { underline = true },
   },
+  border = { "┌", "┐", "└", "┘", "─", "│", "├", "┤" },
 }
 
 ---@type starter.config | (fun(): starter.config) | nil

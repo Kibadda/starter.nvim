@@ -26,5 +26,15 @@ vim.g.starter = {
     Indicator = { fg = "#7DAEA3" },
     Match = { underline = true },
   },
+  border = {
+    "┌", -- top left
+    "┐", -- top right
+    "└", -- bottom left
+    "┘", -- bottom right
+    "─", -- top and bottom
+    "│", -- left and right
+    "├", -- left intersection
+    "┤", -- right intersection
+  },
 }
 ```
