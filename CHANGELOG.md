@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/Kibadda/starter.nvim/compare/v1.1.0...v1.2.0) (2024-09-14)
+
+
+### Features
+
+* add border to config ([8668aa3](https://github.com/Kibadda/starter.nvim/commit/8668aa39121279b70ef7e27ef118319e11a21c13))
+
+
+### Bug Fixes
+
+* add missing config validation ([f1d7fa7](https://github.com/Kibadda/starter.nvim/commit/f1d7fa7b2b6d3c37c75d390cdf4edd08e567b23c))
+
 ## [1.1.0](https://github.com/Kibadda/starter.nvim/compare/v1.0.1...v1.1.0) (2024-09-12)
 
 
