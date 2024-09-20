@@ -11,7 +11,7 @@
 ---@class starter.config
 ---@field items? fun(): starter.item[]
 ---@field options? table
----@field highlights? table
+---@field highlights? starter.config.highlights
 ---@field indicator? string
 ---@field keys? string
 
