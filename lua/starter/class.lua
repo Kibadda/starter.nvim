@@ -254,6 +254,7 @@ function M:teardown()
 
   vim.api.nvim_clear_autocmds { group = self.group }
   vim.api.nvim_win_set_hl_ns(self.win, 0)
+  vim.api.nvim_buf_delete(self.buf, { force = true })
 end
 
 function M.new(opts)
