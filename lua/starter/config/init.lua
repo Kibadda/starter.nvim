@@ -56,10 +56,9 @@ for name, val in pairs(opts.highlights or {}) do
   StarterConfig.highlights[name] = val
 end
 
-local check = require "starter.config.check"
-local ok, err = check.validate(StarterConfig)
+local ok = require("starter.config.check").validate(StarterConfig)
 if not ok then
-  vim.notify("starter: " .. err, vim.log.levels.ERROR)
+  vim.notify("starter: there are errors in your config. see `:checkhealth starter`", vim.log.levels.ERROR)
 end
 
 return StarterConfig

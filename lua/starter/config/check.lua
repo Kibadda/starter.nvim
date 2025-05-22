@@ -1,51 +1,44 @@
 local M = {}
 
---- small wrapper around vim.validate
----@param path string
----@param tbl table
----@return boolean
----@return string?
-local function validate(path, tbl)
-  local prefix = "invalid config: "
-  local ok, err = pcall(vim.validate, tbl)
-  return ok or false, prefix .. (err and path .. "." .. err or path)
-end
-
 --- validate given config
 ---@param config starter.internalconfig
 ---@return boolean
----@return string?
+---@return string[]
 function M.validate(config)
-  local ok, err
+  local errors = {}
 
-  ok, err = validate("starter", {
-    items = { config.items, "function", true },
-    options = { config.options, "table", true },
-    indicator = { config.indicator, "string", true },
-    keys = { config.keys, "string", true },
-    highlights = { config.highlights, "table", true },
-    border = {
-      config.border,
-      function(a)
-        return a == nil or (type(a) == "table" and #a == 8)
-      end,
-    },
-  })
-  if not ok then
-    return false, err
+  --- small wrapper around vim.validate
+  ---@param name string
+  ---@param value any
+  ---@param types any|any[]
+  ---@param optional? boolean
+  ---@return boolean
+  local function validate(name, value, types, optional)
+    local ok, err = pcall(vim.validate, name, value, types, optional)
+
+    if not ok then
+      table.insert(errors, err)
+    end
+
+    return ok
   end
 
-  ok, err = validate("starter.highlights", {
-    Day = { config.highlights.Day, "table", true },
-    Selected = { config.highlights.Selected, "table", true },
-    Indicator = { config.highlights.Indicator, "table", true },
-    Match = { config.highlights.Match, "table", true },
-  })
-  if not ok then
-    return false, err
+  validate("starter.items", config.items, "function", true)
+  validate("starter.options", config.options, "table", true)
+  validate("starter.indicator", config.indicator, "string", true)
+  validate("starter.keys", config.keys, "string", true)
+  validate("starter.border", config.border, function(a)
+    return a == nil or (type(a) == "table" and #a == 8)
+  end, true)
+
+  if validate("starter.highlights", config.highlights, "table", true) and config.highlights then
+    validate("starter.highlights.Day", config.highlights.Day, "table", true)
+    validate("starter.highlights.Selected", config.highlights.Selected, "table", true)
+    validate("starter.highlights.Indicator", config.highlights.Indicator, "table", true)
+    validate("starter.highlights.Match", config.highlights.Match, "table", true)
   end
 
-  return true
+  return #errors == 0, errors
 end
 
 return M
