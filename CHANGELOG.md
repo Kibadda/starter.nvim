@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.0](https://github.com/Kibadda/starter.nvim/compare/v1.2.0...v1.3.0) (2025-05-22)
+
+
+### Features
+
+* add command to open starter ([9cbc122](https://github.com/Kibadda/starter.nvim/commit/9cbc122007e52b6017b13c343ed4e16dcebd2c69))
+* add nix files ([b45ffe4](https://github.com/Kibadda/starter.nvim/commit/b45ffe40ecc594c19d8de1832a2d6cd2d3cd80e7))
+
+
+### Bug Fixes
+
+* delete buffer in teardown ([f9ed107](https://github.com/Kibadda/starter.nvim/commit/f9ed107ff76134c033431da7bb934c999fc9581a))
+
 ## [1.2.0](https://github.com/Kibadda/starter.nvim/compare/v1.1.0...v1.2.0) (2024-09-14)
 
 
