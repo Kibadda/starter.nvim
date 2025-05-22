@@ -116,6 +116,8 @@ function M:setup()
     self:teardown()
     item.action()
   end)
+
+  vim.api.nvim_win_set_buf(self.win, self.buf)
 end
 
 function M:calculate_offsets()
@@ -263,6 +265,10 @@ function M.new(opts)
   local mapping = {}
   for i, item in ipairs(items) do
     mapping[item.text] = i
+  end
+
+  if not opts.buf then
+    opts.buf = vim.api.nvim_create_buf(false, false)
   end
 
   local starter = setmetatable({
