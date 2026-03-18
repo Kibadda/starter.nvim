@@ -158,7 +158,7 @@ function M:display()
       .. border[6]
   )
   local v = vim.version()
-  local version = ("NVIM v%d.%d.%d-%s"):format(v.major, v.minor, v.patch, v.prerelease)
+  local version = ("NVIM v%d.%d.%d-%s+%s"):format(v.major, v.minor, v.patch, v.prerelease, v.build)
   local version_offset = (self._offsets.width - #version) / 2
   table.insert(
     lines,
