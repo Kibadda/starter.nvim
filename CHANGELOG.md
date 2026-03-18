@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/Kibadda/starter.nvim/compare/v1.3.0...v1.4.0) (2026-03-18)
+
+
+### Features
+
+* also show build in version string ([7ca64d8](https://github.com/Kibadda/starter.nvim/commit/7ca64d8ccdabd86eeba78dcf964d855d1ea21018))
+
 ## [1.3.0](https://github.com/Kibadda/starter.nvim/compare/v1.2.0...v1.3.0) (2025-05-22)
 
 
